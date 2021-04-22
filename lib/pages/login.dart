@@ -14,22 +14,24 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
+    _text.text = 'ok';
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Login Page'),
         backgroundColor: Colors.cyan[700],
         centerTitle: true,
       ),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(50, 150, 50, 0),
-        child: Center(child: Builder(
-          builder: (context) {
+      body: GestureDetector(
+        onTap: ()=> FocusScope.of(context).unfocus(),
+              child: Padding(
+          padding: EdgeInsets.fromLTRB(50, 150, 50, 0),
+          child: Center(child: Builder(
+            builder: (context) {
               return Container(
                 child: Column(
                   children: [
@@ -40,27 +42,45 @@ class _LoginState extends State<Login> {
                         errorText:
                             _isEmptyEmail ? 'email cant\'t be empity' : null,
                         hoverColor: Colors.red[900],
-                      ), 
+                      ),
+                      onChanged: (value) => setState(() {
+                        if (_text.text.isEmpty)
+                          _isEmptyEmail = true;
+                        else
+                          _isEmptyEmail = false;
+                      }),
                     ),
                     SizedBox(height: 10),
                     TextField(
+                      obscureText: true,
                       controller: _password,
                       decoration: InputDecoration(
                         labelText: 'Enter password',
-                        errorText: _isEmptyPassword
-                            ? 'pasword cant\'t be empity'
-                            : null,
+                        errorText:
+                            _isEmptyPassword ? 'pasword cant\'t be empty' : null,
                         hoverColor: Colors.red[900],
                       ),
+                      onChanged: (value) => setState(() {
+                        if (_password.text.isEmpty)
+                          _isEmptyPassword = true;
+                        else
+                          _isEmptyPassword = false;
+                      }),
                     ),
                     SizedBox(height: 10),
                     RaisedButton(
                       onPressed: () {
                         if (_text.text.isEmpty || _password.text.isEmpty) {
                           setState(() {
-                            if (_text.text.isEmpty) _isEmptyEmail = true;
+                            if (_text.text.isEmpty)
+                              _isEmptyEmail = true;
+                            else
+                              _isEmptyEmail = false;
 
-                            if (_password.text.isEmpty) _isEmptyPassword = true;
+                            if (_password.text.isEmpty)
+                              _isEmptyPassword = true;
+                            else
+                              _isEmptyEmail = false;
                           });
                         } else
                           Navigator.pushNamed(context, '/id');
@@ -78,8 +98,9 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               );
-          },
-        )),
+            },
+          )),
+        ),
       ),
     );
   }
